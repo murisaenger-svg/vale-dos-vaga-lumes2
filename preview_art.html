@@ -1,0 +1,20 @@
+<!doctype html><meta charset=utf-8><body style="margin:0;background:#7ec850">
+<script src="../js/core/util.js"></script><script src="../js/art/px.js"></script><script src="../js/art/tiles.js"></script><script src="../js/art/nature.js"></script><script src="../js/art/characters.js"></script>
+<canvas id=c width=900 height=1000 style="image-rendering:pixelated"></canvas>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');x.imageSmoothingEnabled=false;x.scale(2,2);
+const N=VV.Art.Nature,C=VV.Art.Chars;
+let px=4;
+function put(s,xx,yy){x.drawImage(s.c,xx-s.ax,yy-s.ay);}
+for(let s=0;s<4;s++){put(N.oak(s,4,s==0?1:0),30+s*55,75);}
+put(N.pine(0),250,75);put(N.pine(3),290,75);put(N.palm(1),335,75);put(N.stump(),370,70);
+for(let st=0;st<4;st++)put(N.oak(0,st,0),400+st*22,70);
+put(N.rock('stone',false,true),30,130);put(N.rock('copper',false,false),70,130);put(N.rock('gold',true,false),100,130);put(N.rock('diamond',true,true),140,130);put(N.log(),190,130);put(N.branch(),220,130);put(N.bush(0,'#d8392d'),250,130);put(N.weed(0,1),280,130);put(N.grassTall(0),300,130);
+const types=['leaf','root','stalk','vine','bush','gourd','flower','grape'];
+const cols=[{l:'#5fb84a',f:'#6fcf4a'},{l:'#6aa845',f:'#e8793a'},{l:'#6aa845',f:'#f2c230'},{l:'#4fa83a',f:'#d8392d'},{l:'#3f9e3b',f:'#5a6bd8'},{l:'#4f9e3b',f:'#e8821e'},{l:'#4fa83a',f:'#ff7aa6',flower:1},{l:'#4fa83a',f:'#7a3fa8'}];
+types.forEach((t,i)=>{for(let st=0;st<5;st++)put(N.crop(t,cols[i],st,5,false),20+st*20+(i%4)*110,200+Math.floor(i/4)*50+0);});
+const specs=[C.CHEF,{skin:'#8d5330',hair:'#e8c56a',style:'longo',shirt:'#c9462c',pants:'#3c4a6a',skirt:1},{skin:'#fbd5b5',hair:'#d9d9e0',style:'curto',shirt:'#5a8a4a',pants:'#6a5a3a',beard:'#d9d9e0',hat:'straw',glasses:'#333'},{skin:'#d99a6c',hair:'#7a4aa8',style:'coque',shirt:'#e0a63a',pants:'#444',apron:'#fff',kid:1},{skin:'#fbd5b5',hair:'#c9462c',style:'cacheado',shirt:'#3c8a8a',pants:'#555',hat:'beanie',hatColor:'#c24a3a'}];
+specs.forEach((sp,i)=>{const sh=C.sheet(sp);for(let d=0;d<4;d++){x.drawImage(sh.frames[d][i==0?1:0],20+i*110+d*24-0,310-0);} x.drawImage(sh.frames[0][1],20+i*110,350);x.drawImage(sh.use[0],20+i*110+24,350);x.drawImage(sh.use[2],20+i*110+48,350);x.drawImage(sh.frames[2][1],20+i*110+72,350);});
+put(C.chicken('white',0,0,false),30,430);put(C.chicken('brown',0,1,false),60,430);put(C.chicken('white',0,0,true),90,430);put(C.cow('white',0,0),140,435);put(C.cow('brown',2,1),190,435);
+put(C.slime('#6fd05a',0),240,430);put(C.slime('#ff7a8a',1),270,430);put(C.bat(0),310,425);put(C.bat(1),340,425);put(C.golem(0),385,435);put(C.wisp(0),430,430);put(C.firefly(0),470,430);
+</script>

@@ -1,0 +1,37 @@
+<!doctype html><meta charset=utf-8><body style="margin:0;background:#222">
+<script src="../js/core/util.js"></script><script src="../js/art/px.js"></script><script src="../js/art/tiles.js"></script>
+<script>
+const W=28,H=18;
+function mkmap(){
+  const g=[];for(let y=0;y<H;y++){g.push([]);for(let x=0;x<W;x++)g[y].push('grass');}
+  // lago
+  for(let y=3;y<11;y++)for(let x=3;x<14;x++){const d=Math.hypot(x-8.5,y-7)/5; if(d<1)g[y][x]='water'; else if(d<1.25)g[y][x]='sand';}
+  // caminho
+  for(let x=0;x<W;x++){g[13][x]='path';g[14][x]='path';}
+  for(let y=0;y<14;y++)g[y][20]='path';
+  // praça
+  for(let y=4;y<9;y++)for(let x=22;x<27;x++)g[y][x]='cobble';
+  for(let y=15;y<18;y++)for(let x=2;x<10;x++)g[y][x]='rock';
+  for(let y=15;y<18;y++)for(let x=12;x<22;x++)g[y][x]='sand';
+  for(let x=0;x<W;x++){g[0][x]='cliff';g[1][x]='cliff';}
+  return {w:W,h:H,ground:g,theme:0};
+}
+for(let s=0;s<4;s++){const m=mkmap();VV.Art.Tiles.renderMap(m,s);
+  const c=document.createElement('canvas');c.width=W*16*2;c.height=H*16*2;c.style.cssText='image-rendering:pixelated;margin:2px';
+  const x=c.getContext('2d');x.imageSmoothingEnabled=false;
+  x.drawImage(m.groundCanvas,0,0,c.width,c.height); if(m.waterCanvas[0])x.drawImage(m.waterCanvas[0],0,0,c.width,c.height);
+  document.body.appendChild(c);
+}
+// resto das texturas
+const row=document.createElement('canvas');row.width=16*16*2;row.height=40*2;row.style.cssText='image-rendering:pixelated';document.body.appendChild(row);
+const rx=row.getContext('2d');rx.imageSmoothingEnabled=false;
+let i=0;
+for(const k of ['wood','tile','wall_top','wall_face','cave_floor','cave_wall','cave_wall_face','cliff_face']){
+  const id=rx.createImageData(16,16);VV.Art.Tiles.composeTile(id.data,16,0,0,k,1,1,[null,null,null,null,null,null,null,null],0,[0,1,2,3,4,5,0,0][i%8],0);
+  const t=document.createElement('canvas');t.width=16;t.height=16;t.getContext('2d').putImageData(id,0,0);rx.drawImage(t,i*34,0,32,32);i++;
+}
+for(let th=0;th<6;th++){const id=rx.createImageData(16,16);VV.Art.Tiles.composeTile(id.data,16,0,0,'wall_face',1,1,[null,null,null,null,null,null,null,null],0,th,0);
+  const t=document.createElement('canvas');t.width=16;t.height=16;t.getContext('2d').putImageData(id,0,0);rx.drawImage(t,(8+th)*34,0,32,32);}
+// terra arada
+for(let m=0;m<16;m++){const c=VV.Art.Tiles.soil(m,false);rx.drawImage(c,m*34,40,32,32); }
+</script>
